@@ -1,6 +1,7 @@
 # Site-specific hook; no fork or shadow copy of the al-folio theme is needed.
 require 'cgi'
 require 'uri'
+require 'digest'
 
 Jekyll::Hooks.register [:pages, :documents], :post_render do |page|
   site = page.site
@@ -16,10 +17,12 @@ Jekyll::Hooks.register [:pages, :documents], :post_render do |page|
     next
   end
   base = site.baseurl.to_s.sub(%r{/$}, '')
+  version = Digest::SHA256.file(File.join(site.source, 'assets/js/visitor-alerts.js')).hexdigest[0, 12]
   attrs = {
     'id' => 'portfolio-visitor-alerts',
-    'src' => "#{base}/assets/js/visitor-alerts.js",
+    'src' => "#{base}/assets/js/visitor-alerts.js?v=#{version}",
     'data-endpoint' => endpoint,
+    'data-alert-status' => 'not-started',
     'data-site-url' => "#{site.config['url']}#{base}/",
     'data-consent-required' => (site.config['enable_cookie_consent'] == true).to_s
   }
