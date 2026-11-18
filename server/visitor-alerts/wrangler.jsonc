@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nathan-portfolio-visitor-alerts",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-11-18",
+  "workers_dev": true,
+  "vars": {
+    "SITE_URL": "https://nrose1163.github.io/website/",
+    "GITHUB_REPOSITORY": "NRose1163/website",
+    "GITHUB_WORKFLOW": "visitor-alert.yml",
+    "GITHUB_REF": "main",
+    "MAX_ALERTS_PER_DAY": "100",
+  },
+  "durable_objects": {
+    "bindings": [{ "name": "VISITS", "class_name": "VisitRegistry" }],
+  },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["VisitRegistry"] }],
+  "ratelimits": [{ "name": "VISIT_RATE_LIMITER", "namespace_id": "116311", "simple": { "limit": 10, "period": 60 } }],
+  "observability": { "enabled": false },
+}

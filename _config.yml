@@ -129,6 +129,12 @@ analytics:
   cloudflare: # your Cloudflare Web Analytics beacon token (32 hex characters)
 enable_simple_analytics: false # Simple Analytics identifies a site by its domain, so it has no ID to set above
 
+# GitHub email visitor alerts. Enable after deploying the relay; see docs/VISITOR_ALERTS.md.
+# Only the public relay URL belongs here. Keep the GitHub token in Worker secrets.
+visitor_alerts:
+  enabled: false
+  endpoint: "https://nathan-portfolio-visitor-alerts.xkosher.workers.dev/visit"
+
 # For Google Search Console, see https://support.google.com/webmasters/answer/9008080?hl=en#meta_tag_verification&zippy=%2Chtml-tag
 google_site_verification: # your google-site-verification ID (Google Search Console)
 bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
@@ -239,6 +245,8 @@ exclude:
   - docker-compose.yml
   - docker-compose-slim.yml
   - docs/
+  - server/
+  - test/visitor-alerts/
   - Gemfile
   - Gemfile.lock
   - LICENSE

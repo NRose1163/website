@@ -1,0 +1,19 @@
+name: New portfolio visitor
+run-name: New portfolio visitor
+
+on:
+  workflow_dispatch:
+
+# This workflow only records the alert. It does not need repository credentials.
+permissions: {}
+
+jobs:
+  visitor-alert:
+    name: Portfolio visit
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Record the notification
+        run: |
+          echo 'A new browser visited your portfolio.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'GitHub sends the workflow notification using your notification preferences.' >> "$GITHUB_STEP_SUMMARY"
