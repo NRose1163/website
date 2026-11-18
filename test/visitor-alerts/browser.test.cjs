@@ -88,16 +88,25 @@ test("owner opt-out persists without making a request", async () => {
   assert.equal((await browser({ data: first.data, url: "https://nrose1163.github.io/website/?visitor_alerts=on" })).requests.length, 1);
 });
 
-test("blocked storage, preview hosts, bots, privacy opt-outs and unrelated paths do not alert", async () => {
+test("blocked storage, preview hosts, bots and unrelated paths do not alert", async () => {
   for (const options of [
     { blockStorage: true },
     { url: "http://localhost:4000/website/" },
     { url: "https://nrose1163.github.io/another-site/" },
     { navigator: { webdriver: true } },
-    { navigator: { globalPrivacyControl: true } },
-    { navigator: { doNotTrack: "1" } },
   ])
     assert.equal((await browser(options)).requests.length, 0);
+});
+
+test("DNT and GPC browsers receive one anonymous alert without duplicates", async () => {
+  for (const navigator of [{ doNotTrack: "1" }, { globalPrivacyControl: true }, { doNotTrack: "1", globalPrivacyControl: true }]) {
+    const first = await browser({ navigator });
+    assert.equal(first.requests.length, 1);
+    assert.equal(first.context.document.currentScript.dataset.alertStatus, "accepted");
+    assert.deepEqual(Object.keys(JSON.parse(first.requests[0].body)), ["visitorId"]);
+    assert.equal((await browser({ navigator, data: first.data })).requests.length, 0);
+    assert.equal((await browser({ navigator, data: first.data, url: "https://nrose1163.github.io/website/projects/" })).requests.length, 0);
+  }
 });
 
 test("waits for the page to become visible", async () => {

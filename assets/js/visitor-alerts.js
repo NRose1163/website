@@ -18,7 +18,6 @@
   const base = site.pathname.replace(/\/$/, "");
   if (location.origin !== site.origin || (location.pathname !== base && !location.pathname.startsWith(`${base}/`))) return report("outside-site");
   if (navigator.webdriver) return report("automated-browser");
-  if (navigator.globalPrivacyControl || navigator.doNotTrack === "1") return report("privacy-opt-out");
 
   const prefix = `portfolio-visitor:${base}:v1`;
   let running = false;

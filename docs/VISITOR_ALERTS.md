@@ -6,7 +6,8 @@ notification emails deliver the alert. Your existing Mail or Gmail app can show
 a phone notification for that email. No ntfy account, ntfy app, or other new
 notification service is needed. The portfolio stays on GitHub Pages.
 
-The feature is disabled until the relay URL is set and delivery is tested.
+The feature is controlled by `visitor_alerts.enabled` in `_config.yml`. Enable it
+only after the relay URL is set and email delivery is tested.
 
 ## Activate
 
@@ -78,9 +79,11 @@ The feature is disabled until the relay URL is set and delivery is tested.
   Disabling the workflow, expiring the token, changing email settings, or filtering
   email can prevent an alert. This uses event-driven workflow dispatch, not a
   scheduled workflow that stops after repository inactivity.
-- Disabled JavaScript, blocked storage, DNT/GPC privacy opt-outs, and detected
-  browser automation skip alerts. Hidden tabs wait until visible. If the site's
-  cookie-consent feature is enabled, alerts wait for analytics consent.
+- DNT/GPC browser signals do not suppress these visit alerts. The explicit owner
+  exclusion and the site's analytics consent gate still apply.
+- Disabled JavaScript, blocked storage, and detected browser automation skip
+  alerts. Hidden tabs wait until visible. If the site's cookie-consent feature
+  is enabled, alerts wait for analytics consent.
 
 ## Validation and disabling
 
@@ -93,6 +96,11 @@ The Jekyll hook adds the script to HTML pages without overriding the theme.
 The relay and new tests are excluded from the public site build. Use the real
 `/website` baseurl when building. Set `visitor_alerts.enabled: false` and publish
 to disable; existing tabs can still complete in-flight requests.
+
+For diagnosis, the `portfolio-visitor-alerts` script element exposes its current
+decision in `data-alert-status`, such as `accepted`, `already-notified`,
+`owner-excluded`, or `relay-http-503`. This status contains no visitor identifier.
+The script URL includes a content version so browsers load fixes after deployment.
 
 ## References
 
